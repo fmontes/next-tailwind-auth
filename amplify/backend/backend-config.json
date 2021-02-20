@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "nexttailwindauth28e67092": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
