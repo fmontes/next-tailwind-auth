@@ -26,7 +26,7 @@ function Protected(): JSX.Element {
             setUserState(user);
         } catch (error) {
             setUserState(null);
-            router.push('/profile')
+            router.push('/profile');
         }
     }
 
