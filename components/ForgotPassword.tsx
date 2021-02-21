@@ -3,13 +3,11 @@ import Input from './Input';
 import { UiStateMode } from 'pages/profile';
 
 type Props = {
-    setUiState: Dispatch<SetStateAction<UiStateMode>>;
     forgotPassword: () => void;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function ForgotPassword({
-    setUiState,
     forgotPassword,
     onChange
 }: Props): JSX.Element {
@@ -29,7 +27,13 @@ export default function ForgotPassword({
                     >
                         Cancel
                     </button>
-                    <button className="block bg-blue-900 text-white py-2 px-4">
+                    <button
+                        className="block bg-blue-900 text-white py-2 px-4"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            forgotPassword();
+                        }}
+                    >
                         Recover my password
                     </button>
                 </div>

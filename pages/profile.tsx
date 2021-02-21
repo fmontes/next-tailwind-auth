@@ -88,12 +88,16 @@ function Profile(): JSX.Element {
 
     async function forgotPassword() {
         try {
+            await Auth.forgotPassword(email);
+            setUiState('FORGOT_PASSWORD_SUBMIT');
         } catch (error) {
             console.log(error);
         }
     }
 
     async function forgotPasswordSubmit() {
+        await Auth.forgotPasswordSubmit(email, authCode, password);
+        setUiState('SIGN_IN');
         try {
         } catch (error) {
             console.log(error);
@@ -130,7 +134,6 @@ function Profile(): JSX.Element {
                 {uiState === 'FORGOT_PASSWORD' && (
                     <ForgotPassword
                         forgotPassword={forgotPassword}
-                        setUiState={setUiState}
                         onChange={onChange}
                     />
                 )}
