@@ -132,10 +132,7 @@ function Profile(): JSX.Element {
                     <ConfirmSignUp confirmSignUp={confirmSignUp} onChange={onChange} />
                 )}
                 {uiState === 'FORGOT_PASSWORD' && (
-                    <ForgotPassword
-                        forgotPassword={forgotPassword}
-                        onChange={onChange}
-                    />
+                    <ForgotPassword forgotPassword={forgotPassword} onChange={onChange} />
                 )}
                 {uiState === 'FORGOT_PASSWORD_SUBMIT' && (
                     <ForgotPasswordSubmit

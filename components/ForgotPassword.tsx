@@ -7,10 +7,7 @@ type Props = {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function ForgotPassword({
-    forgotPassword,
-    onChange
-}: Props): JSX.Element {
+export default function ForgotPassword({ forgotPassword, onChange }: Props): JSX.Element {
     return (
         <>
             <h3 className="text-2xl text-blue-800 font-bold mb-5">Forgot password?</h3>
