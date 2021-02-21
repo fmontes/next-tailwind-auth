@@ -5,6 +5,9 @@ import { Auth } from 'aws-amplify';
 import '../configureAmplify';
 import SingIn from '@components/SignIn';
 import SingUp from '@components/SignUp';
+import ForgotPassword from '@components/ForgotPassword';
+import ForgotPasswordSubmit from '@components/ForgotPasswordSubmit';
+import ConfirmSignUp from '@components/ConfirmSignUp';
 
 const initialState = {
     email: '',
@@ -12,31 +15,90 @@ const initialState = {
     authCode: ''
 };
 
-type UiStateMode = 'LOGGED_IN' | 'SIGN_IN' | 'SIGN_UP';
+interface FormState {
+    email: string;
+    password: string;
+    authCode: string;
+}
+
+export type UiStateMode =
+    | 'LOGGED_IN'
+    | 'SIGN_IN'
+    | 'SIGN_UP'
+    | 'FORGOT_PASSWORD'
+    | 'FORGOT_PASSWORD_SUBMIT'
+    | 'CONFIRM_SINGUP';
 
 function Profile(): JSX.Element {
     const [uiState, setUiState] = useState<UiStateMode>(null);
-    const [formState, setFormState] = useState(initialState);
+    const [formState, setFormState] = useState<FormState>(initialState);
     const [userState, setUserState] = useState(null);
+
+    const { email, password, authCode } = formState;
 
     useEffect(() => {
         checkUser();
-
-        async function checkUser() {
-            try {
-                const user = await Auth.currentAuthenticatedUser();
-                setUserState(user);
-                setUiState(user ? 'LOGGED_IN' : 'SIGN_IN');
-            } catch (error) {
-                setUiState('SIGN_IN');
-                setUserState(null);
-            }
-        }
     }, []);
 
-    // function onChange(e) {
-    //     setFormState({ ...formState, [e.target.name]: e.target.value });
-    // }
+    async function checkUser() {
+        try {
+            const user = await Auth.currentAuthenticatedUser();
+            setUserState(user);
+            setUiState(user ? 'LOGGED_IN' : 'SIGN_IN');
+        } catch (error) {
+            setUiState('SIGN_IN');
+            setUserState(null);
+        }
+    }
+
+    function onChange(e) {
+        setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
+
+    async function singUp() {
+        try {
+            await Auth.signUp({
+                username: email,
+                password,
+                attributes: { email }
+            });
+            setUiState('CONFIRM_SINGUP');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function confirmSignUp() {
+        try {
+            await Auth.confirmSignUp(email, authCode);
+            await singIn();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function singIn() {
+        try {
+            await Auth.signIn(email, password);
+            checkUser();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function forgotPassword() {
+        try {
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function forgotPasswordSubmit() {
+        try {
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-300">
@@ -47,6 +109,7 @@ function Profile(): JSX.Element {
                         <button
                             onClick={() => {
                                 Auth.signOut();
+                                setUiState('SIGN_IN');
                                 setUserState(null);
                             }}
                         >
@@ -56,36 +119,26 @@ function Profile(): JSX.Element {
                 )}
 
                 {uiState === 'SIGN_IN' && (
-                    <>
-                        <SingIn />
-                        <p className="mt-4">
-                            Don&apos;t have an account?{' '}
-                            <button
-                                className="text-blue-800 underline"
-                                onClick={() => {
-                                    setUiState('SIGN_UP');
-                                }}
-                            >
-                                Sing Up
-                            </button>
-                        </p>
-                    </>
+                    <SingIn setUiState={setUiState} singIn={singIn} onChange={onChange} />
                 )}
                 {uiState === 'SIGN_UP' && (
-                    <>
-                        <SingUp />
-                        <p className="mt-4">
-                            Have an account?{' '}
-                            <button
-                                className="text-blue-800 underline"
-                                onClick={() => {
-                                    setUiState('SIGN_IN');
-                                }}
-                            >
-                                Sing In
-                            </button>
-                        </p>
-                    </>
+                    <SingUp setUiState={setUiState} singUp={singUp} onChange={onChange} />
+                )}
+                {uiState === 'CONFIRM_SINGUP' && (
+                    <ConfirmSignUp confirmSignUp={confirmSignUp} onChange={onChange} />
+                )}
+                {uiState === 'FORGOT_PASSWORD' && (
+                    <ForgotPassword
+                        forgotPassword={forgotPassword}
+                        setUiState={setUiState}
+                        onChange={onChange}
+                    />
+                )}
+                {uiState === 'FORGOT_PASSWORD_SUBMIT' && (
+                    <ForgotPasswordSubmit
+                        forgotPasswordSubmit={forgotPasswordSubmit}
+                        onChange={onChange}
+                    />
                 )}
             </div>
         </div>

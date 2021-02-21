@@ -1,43 +1,49 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
-import Link from 'next/link';
 
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import Input from './Input';
+import { UiStateMode } from 'pages/profile';
 
-export default function SingIn(): JSX.Element {
+type Props = {
+    setUiState: Dispatch<SetStateAction<UiStateMode>>;
+    singIn: () => void;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+export default function SingIn({ setUiState, singIn, onChange }: Props): JSX.Element {
     return (
         <>
             <h3 className="text-2xl text-blue-800 font-bold mb-5">Sign in to your account</h3>
             <form action="" className="mb-8">
                 <div className="flex flex-col mb-4">
                     <label htmlFor="email">Email</label>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        onChange={() => {
-                            console.log('Email');
-                        }}
-                    />
+                    <Input id="email" name="email" type="email" onChange={onChange} />
                 </div>
                 <div className="flex flex-col mb-4">
                     <label htmlFor="password">Password</label>
-                    <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        onChange={() => {
-                            console.log('password');
+                    <Input id="password" name="password" type="password" onChange={onChange} />
+
+                    <button
+                        className="text-blue-800 underline text-sm self-end mt-1"
+                        onClick={() => {
+                            setUiState('FORGOT_PASSWORD');
                         }}
-                    />
-                    <Link href="#">
-                        <a className="text-blue-800 underline text-sm self-end mt-1">
-                            Forgot Password?
-                        </a>
-                    </Link>
+                    >
+                        Forgot Password?
+                    </button>
                 </div>
-                <button className="block w-full bg-blue-900 text-white py-2 px-4">Register</button>
+                <button
+                    className="block w-full bg-blue-900 text-white py-2 px-4"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        singIn();
+                    }}
+                >
+                    Sing In
+                </button>
             </form>
 
             <div className="flex">
@@ -64,6 +70,18 @@ export default function SingIn(): JSX.Element {
                     </span>
                 </button>
             </div>
+
+            <p className="mt-4">
+                Don&apos;t have an account?{' '}
+                <button
+                    className="text-blue-800 underline"
+                    onClick={() => {
+                        setUiState('SIGN_UP');
+                    }}
+                >
+                    Sign Up
+                </button>
+            </p>
         </>
     );
 }
