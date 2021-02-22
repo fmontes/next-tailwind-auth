@@ -1,4 +1,14 @@
-# @fmontes [Next.JS](https://nextjs.org/) v10 starter
+![nextjs ](https://user-images.githubusercontent.com/751424/108719060-bbf9ae00-74e4-11eb-90f5-daacc9dda516.png)
+
+
+# NextJS + Tailwind with Amplify and AWS Cognito
+## Authorization proccess
+Using Amplify to build a full authorization process, including:
+1. Sign up and confirmation account
+2. Sign in
+3. Forgot password
+
+## What we have here?
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -22,7 +32,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
 ## Learn More
 
